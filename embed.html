@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe Embed Tool</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Recipe Embed Tool</h1>
+      <p class="tagline">Load a recipes folder/files and export a hardcoded <code>recipes.js</code>.</p>
+    </header>
+
+    <section class="loader">
+      <div class="inputs">
+        <label class="file-btn">
+          <input id="folderInput" type="file" webkitdirectory multiple />
+          <span>Choose recipes folder</span>
+        </label>
+        <label class="file-btn">
+          <input id="filesInput" type="file" accept=".json" multiple />
+          <span>Choose recipe JSON files</span>
+        </label>
+        <button id="exportBtn" disabled>Download recipes.js</button>
+      </div>
+      <div id="dropZone" class="drop-zone" tabindex="0">
+        Drop recipe JSON files or a recipes/ folder here
+      </div>
+      <div id="loadStatus" class="status"></div>
+    </section>
+
+    <main id="results"></main>
+
+    <footer>
+      <p>Place the downloaded <code>recipes.js</code> next to <code>index.html</code>. Then open the viewer and it will auto-load.</p>
+    </footer>
+
+    <script src="embed.js"></script>
+  </body>
+  </html>
+

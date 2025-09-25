@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Recipe Type Coverage</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Recipe Type Coverage</h1>
+      <p class="tagline">Lists unique recipe types and whether the viewer handles them.</p>
+    </header>
+    <main id="types"></main>
+    <script src="recipes.js"></script>
+    <script>
+      (function(){
+        const out = document.getElementById('types');
+        const recs = Array.isArray(window.EMBEDDED_RECIPES) ? window.EMBEDDED_RECIPES : [];
+        const counts = new Map();
+        recs.forEach(r => { const t = String(r.type||'unknown'); counts.set(t, (counts.get(t)||0)+1); });
+        const handled = (t) => {
+          t = t.toLowerCase();
+          if (t.endsWith('crafting_shaped') || t.endsWith('crafting_shapeless')) return 'yes';
+          if (t.includes('mechanical_crafting')) return 'yes';
+          if (/(smelting|blasting|smoking|stonecutting|smithing(_transform|_trim)?$)/.test(t)) return 'yes';
+          if (/create:(sequenced_assembly|crushing|milling|pressing|cutting|mixing|deploying|filling|haunting|splashing|polishing)/.test(t)) return 'yes';
+          if (/farmersdelight:(cooking|cutting)/.test(t)) return 'yes';
+          if (t.includes('gun_smith_table_crafting')) return 'yes';
+          return 'unknown';
+        };
+        const card = document.createElement('div'); card.className='recipe-card';
+        Array.from(counts.entries()).sort((a,b)=>b[1]-a[1]).forEach(([t,c])=>{
+          const row = document.createElement('div'); row.className='step';
+          const a = document.createElement('span'); a.className='badge'; a.textContent=c;
+          const b = document.createElement('span'); b.className='result-badge'; b.textContent=t;
+          const s = document.createElement('span'); s.className='result-badge'; s.textContent='handled: '+handled(t);
+          row.appendChild(a); row.appendChild(b); row.appendChild(s); card.appendChild(row);
+        });
+        out.appendChild(card);
+      })();
+    </script>
+  </body>
+  </html>
+

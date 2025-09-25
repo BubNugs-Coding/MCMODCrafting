@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Minecraft Recipe Explorer</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!--
+      Minecraft Recipe Explorer
+      - Local-only static site to view recipes
+      - Drop recipe JSON folders/files or use embedded recipes.js
+      - Multi-recipe selector, depth-limited recursive expansion
+    -->
+    <header>
+      <h1>Minecraft Recipe Explorer</h1>
+      <p class="tagline">Load your modded recipes and explore crafting trees.</p>
+    </header>
+
+    <section class="loader">
+      <div class="inputs">
+        <label class="file-btn">
+          <input id="folderInput" type="file" webkitdirectory multiple />
+          <span>Choose recipes folder</span>
+        </label>
+        <label class="file-btn">
+          <input id="filesInput" type="file" accept=".json" multiple />
+          <span>Choose recipe JSON files</span>
+        </label>
+      </div>
+      <div id="dropZone" class="drop-zone" tabindex="0">
+        Drop recipe JSON files or a recipes/ folder here
+      </div>
+      <p class="hint">
+        Tip: For a datapack, select the <code>data/&lt;namespace&gt;/recipes</code> folder.
+        For mods, extract each mod's <code>data/&lt;modid&gt;/recipes</code> from its JAR.
+      </p>
+      <div id="loadStatus" class="status"></div>
+    </section>
+
+    <section class="search">
+      <div class="controls">
+        <input id="searchInput" type="text" placeholder="Search item id (e.g. minecraft:stick, modid:gear)" list="itemList" />
+        <datalist id="itemList"></datalist>
+        <button id="showBtn" disabled>Show Recipe</button>
+        <label class="depth">
+          Depth
+          <input id="depthInput" type="range" min="1" max="6" value="3" />
+          <span id="depthValue">3</span>
+        </label>
+        <label class="depth" title="Toggle display names vs raw ids">
+          <input id="displayToggle" type="checkbox" checked />
+          Show display names
+        </label>
+      </div>
+      <div id="searchNote" class="hint"></div>
+    </section>
+
+    <main id="results"></main>
+
+    <footer>
+      <p>
+        Local-only viewer. No data leaves your browser. Supports shaped/shapeless crafting and basic processing (smelting/blasting/smoking/stonecutting/smithing) with simple rendering. Mod-specific recipe types may need extending.
+      </p>
+      <p>
+        Want it hardcoded? Use <a href="embed.html">Embed Tool</a> to generate a <code>recipes.js</code> file, place it next to this page, and reload.
+      </p>
+    </footer>
+    <!-- Optional embedded recipes; ignore 404 if absent -->
+    <script src="recipes.js"></script>
+    <script src="app.js"></script>
+  </body>
+  </html>
