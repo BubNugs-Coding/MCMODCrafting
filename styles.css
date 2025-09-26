@@ -7,6 +7,14 @@
   --accent-2: #5ea9e3;
   --border: #262b36;
   --error: #ff6b6b;
+
+  /* Vanilla GUI-inspired palette */
+  --mc-panel-bg: #c6c6c6;        /* vanilla screen background grey */
+  --mc-panel-edge: #373737;      /* dark frame edge */
+  --mc-panel-edge2: #8b8b8b;     /* light frame edge */
+  --mc-slot-bg: #8b8b8b;         /* vanilla slot grey */
+  --mc-slot-light: #ffffff20;    /* subtle highlight */
+  --mc-slot-dark: #00000030;     /* subtle shadow */
 }
 
 * { box-sizing: border-box; }
@@ -93,13 +101,33 @@ footer { border-top: 1px solid var(--border); color: var(--muted); padding: 12px
 .highlight { color: var(--accent); }
 
 /* Crafting-style panel visuals */
-.crafting-panel { display: flex; align-items: center; gap: 12px; padding: 8px; background: #11161f; border: 1px solid #263044; border-radius: 8px; }
-.crafting-grid { box-shadow: inset 0 0 0 2px #1e2634; padding: 6px; border-radius: 6px; background: linear-gradient(180deg, #0e131b, #0b0f15); }
-.output-slot { box-shadow: inset 0 0 0 2px #1e2634; padding: 6px; border-radius: 6px; background: linear-gradient(180deg, #0e131b, #0b0f15); }
+.crafting-panel {
+  display: flex; align-items: center; gap: 12px; padding: 10px;
+  background: var(--mc-panel-bg);
+  border: 2px solid var(--mc-panel-edge);
+  border-radius: 6px;
+  box-shadow: inset 0 0 0 2px var(--mc-panel-edge2);
+}
+.crafting-grid, .output-slot {
+  padding: 6px; border-radius: 4px;
+  background: linear-gradient(180deg, #d6d6d6, #bfbfbf);
+  box-shadow: inset 0 0 0 2px var(--mc-panel-edge);
+}
+.crafting-panel .slot, .output-slot .slot {
+  background: var(--mc-slot-bg);
+  border: 1px solid var(--mc-panel-edge);
+  box-shadow: inset -2px -2px 0 var(--mc-slot-dark), inset 2px 2px 0 var(--mc-slot-light);
+  color: #111;
+}
 .badge.shapeless { background: #1a2230; border-color: #2a364a; color: #cfdae8; }
 
 /* Machine panels for Create/Farmer's Delight etc. */
-.machine { padding: 8px; background: #10161f; border: 1px solid #273348; border-radius: 8px; }
+.machine {
+  padding: 10px; border-radius: 6px;
+  background: var(--mc-panel-bg);
+  border: 2px solid var(--mc-panel-edge);
+  box-shadow: inset 0 0 0 2px var(--mc-panel-edge2);
+}
 .machine-title { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px; }
 .action-badge { padding: 2px 8px; border-radius: 999px; color: #fff; font-size: 0.78rem; }
 .action-crushing { background: #9b59b6; }
