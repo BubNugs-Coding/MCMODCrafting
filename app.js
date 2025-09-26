@@ -351,11 +351,17 @@ function slotLabel(options) {
   return names.join(' / ');
 }
 
-function renderGrid(grid, out, dims) {
-  const wrap = document.createElement('div');
+// Render a crafting-style panel with an input grid and output slot
+function renderCrafting(grid, out, dims, options = {}) {
   const cols = dims?.cols || 3;
   const rows = dims?.rows || 3;
   const total = rows * cols;
+  const panel = document.createElement('div');
+  panel.className = 'crafting-panel';
+
+  const gridWrap = document.createElement('div');
+  gridWrap.className = 'crafting-grid';
+  const wrap = document.createElement('div');
   wrap.className = 'grid' + (dims ? ' dynamic' : '');
   if (dims) wrap.style.gridTemplateColumns = `repeat(${cols}, 64px)`;
   for (let i = 0; i < total; i++) {
@@ -365,21 +371,24 @@ function renderGrid(grid, out, dims) {
     cell.textContent = slotLabel(opts) || '';
     wrap.appendChild(cell);
   }
-  // Output slot (not part of grid)
-  const outRow = document.createElement('div');
-  outRow.className = 'io';
-  const arrow = document.createElement('span');
-  arrow.className = 'arrow';
-  arrow.textContent = '→';
-  const outSlot = document.createElement('div');
-  outSlot.className = 'slot';
+  gridWrap.appendChild(wrap);
+
+  const arrow = document.createElement('span'); arrow.className = 'arrow'; arrow.textContent = '→';
+
+  const outWrap = document.createElement('div'); outWrap.className = 'output-slot';
+  const outSlot = document.createElement('div'); outSlot.className = 'slot';
   outSlot.textContent = `${fmtItemLabel(out.item)}${out.count && out.count !== 1 ? ` ×${out.count}` : ''}`;
-  outRow.appendChild(arrow);
-  outRow.appendChild(outSlot);
-  const container = document.createElement('div');
-  container.appendChild(wrap);
-  container.appendChild(outRow);
-  return container;
+  outWrap.appendChild(outSlot);
+
+  panel.appendChild(gridWrap);
+  panel.appendChild(arrow);
+  panel.appendChild(outWrap);
+
+  if (options.shapeless) {
+    const lab = document.createElement('span'); lab.className = 'badge shapeless'; lab.textContent = 'Shapeless';
+    panel.appendChild(lab);
+  }
+  return panel;
 }
 
 function renderProcess(inputs, addition, out) {
@@ -446,14 +455,28 @@ function renderGunsmith(materials, out) {
 
 function renderSimpleProcess(rec, out) {
   const cont = document.createElement('div');
-  cont.className = 'io';
-  const inWrap = document.createElement('div');
-  inWrap.className = 'grid';
-  const first = document.createElement('div'); first.className = 'slot'; first.textContent = slotLabel(rec.inputs);
-  inWrap.appendChild(first);
+  cont.className = 'machine';
+  const title = document.createElement('div');
+  title.className = 'machine-title';
+  const ab = document.createElement('span'); ab.className = `action-badge action-${rec.action}`; ab.textContent = actionLabel(rec.action);
+  title.appendChild(ab);
+  cont.appendChild(title);
+
+  const row = document.createElement('div'); row.className = 'io';
+  const inWrap = document.createElement('div'); inWrap.className = 'grid';
+  // Render up to 3 inputs side-by-side
+  const inputs = rec.inputs && rec.inputs.length ? rec.inputs : [];
+  if (inputs.length) {
+    const s = document.createElement('div'); s.className = 'slot'; s.textContent = slotLabel(inputs);
+    inWrap.appendChild(s);
+  } else {
+    const s = document.createElement('div'); s.className = 'slot empty'; inWrap.appendChild(s);
+  }
   const arrow = document.createElement('span'); arrow.className = 'arrow'; arrow.textContent = '→';
   const outSlot = document.createElement('div'); outSlot.className = 'slot'; outSlot.textContent = `${fmtItemLabel(out.item)}${out.count && out.count !== 1 ? ` ×${out.count}` : ''}`;
-  cont.appendChild(inWrap); cont.appendChild(arrow); cont.appendChild(outSlot);
+  row.appendChild(inWrap); row.appendChild(arrow); row.appendChild(outSlot);
+  cont.appendChild(row);
+
   if (Array.isArray(rec.resultsList) && rec.resultsList.length > 1) {
     const r = document.createElement('div'); r.className = 'step';
     const label = document.createElement('span'); label.className = 'badge'; label.textContent = 'Results';
@@ -510,7 +533,9 @@ function renderSequenced(rec, out) {
   rec.steps.forEach((st, idx) => {
     const row = document.createElement('div');
     row.className = 'step';
-    const badge = document.createElement('span'); badge.className = 'badge'; badge.textContent = `${idx + 1}. ${actionLabel(st.action)}`;
+    const badge = document.createElement('span');
+    badge.className = `action-badge action-${st.action}`;
+    badge.textContent = `${idx + 1}. ${actionLabel(st.action)}`;
     const trans = document.createElement('div'); trans.className = 'slot'; trans.textContent = fmtItemLabel(rec.transitional);
     const arrow = document.createElement('span'); arrow.className = 'arrow'; arrow.textContent = st.extra && st.extra.length ? '+' : '→';
     row.appendChild(badge);
@@ -801,7 +826,7 @@ function renderRecipeCard(out, rec, opts = {}) {
   wrap.appendChild(header);
 
   if (rec.kind === 'shaped' || rec.kind === 'shapeless') {
-    wrap.appendChild(renderGrid(rec.grid, out, rec.dims));
+    wrap.appendChild(renderCrafting(rec.grid, out, rec.dims, { shapeless: rec.kind === 'shapeless' }));
   } else if (rec.kind === 'process') {
     wrap.appendChild(renderProcess(rec.inputs || [], rec.addition || [], out));
   } else if (rec.kind === 'gunsmith') {

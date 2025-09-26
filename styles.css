@@ -91,3 +91,25 @@ footer { border-top: 1px solid var(--border); color: var(--muted); padding: 12px
 .badge { background: #0e141a; border: 1px solid var(--border); color: var(--muted); border-radius: 999px; padding: 2px 8px; font-size: 0.8rem; }
 .result-badge { margin-left: 6px; color: var(--muted); font-size: 0.9rem; }
 .highlight { color: var(--accent); }
+
+/* Crafting-style panel visuals */
+.crafting-panel { display: flex; align-items: center; gap: 12px; padding: 8px; background: #11161f; border: 1px solid #263044; border-radius: 8px; }
+.crafting-grid { box-shadow: inset 0 0 0 2px #1e2634; padding: 6px; border-radius: 6px; background: linear-gradient(180deg, #0e131b, #0b0f15); }
+.output-slot { box-shadow: inset 0 0 0 2px #1e2634; padding: 6px; border-radius: 6px; background: linear-gradient(180deg, #0e131b, #0b0f15); }
+.badge.shapeless { background: #1a2230; border-color: #2a364a; color: #cfdae8; }
+
+/* Machine panels for Create/Farmer's Delight etc. */
+.machine { padding: 8px; background: #10161f; border: 1px solid #273348; border-radius: 8px; }
+.machine-title { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.action-badge { padding: 2px 8px; border-radius: 999px; color: #fff; font-size: 0.78rem; }
+.action-crushing { background: #9b59b6; }
+.action-milling { background: #8e44ad; }
+.action-pressing { background: #e67e22; }
+.action-cutting { background: #e74c3c; }
+.action-mixing { background: #16a085; }
+.action-deploying { background: #2ecc71; }
+.action-filling { background: #3498db; }
+.action-haunting { background: #7f8c8d; }
+.action-splashing { background: #1abc9c; }
+.action-polishing { background: #f1c40f; color: #000; }
+.action-cooking { background: #d35400; }
